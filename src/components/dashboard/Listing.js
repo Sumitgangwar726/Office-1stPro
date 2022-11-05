@@ -13,13 +13,17 @@ import StatusTabs from "./product-table/StatusTabs";
 import SearchField from "../SearchField";
 import Pooper from "../../utils/Pooper";
 import ResourceListFilters from "../Filter";
+import { useSelector } from "react-redux";
+import BadgeList from "../../utils/BadgeList";
 
 const Listing = () => {
   const [serText, setSerText] = useState("");
   const [stab, setStab] = useState(Number(sessionStorage.getItem("tab")));
-  const [filter, setFilter] = useState([]);
+  
 
   const selectedTab = (data) => setStab(data);
+
+  const filter = useSelector(state=>state.filter) 
 
   useEffect(() => {
     console.log(filter);
@@ -33,7 +37,7 @@ const Listing = () => {
         </Card.Section>
         <Card.Section>
           <Stack>
-            <SearchField setFilter={setFilter} />
+            <SearchField  />
             <ResourceListFilters />
             {/* <Button>More Filters</Button> */}
             <Pooper />
@@ -41,6 +45,7 @@ const Listing = () => {
             <Button>Amazon Lookup</Button>
             <Button>Bulk Updates</Button>
           </Stack>
+          <BadgeList data={Object.entries(filter)}/>
         </Card.Section>
         <Card.Section>
           <ProTable currentTab={stab} />

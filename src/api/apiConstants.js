@@ -72,7 +72,7 @@ console.log(filterHeader)
 export const filterHeaders = {
   method : 'POST',
   headers : {...filterHeader},
-  body : JSON.stringify({
+  body : JSON.stringify({  
     "target_marketplace": "eyJtYXJrZXRwbGFjZSI6ImFsbCIsInNob3BfaWQiOm51bGx9",
     "source": {
         "shopId": "476",
@@ -82,3 +82,4 @@ export const filterHeaders = {
 }
 
 export const filterUrl = 'https://multi-account.sellernext.com/home/public/connector/source/getFilterAttributes'
+

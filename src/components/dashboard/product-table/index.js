@@ -4,6 +4,7 @@ import { getRefineProducts, productOptions } from "../../../api/apiConstants";
 import columns from "./columns";
 import { tableOnRow } from "./tableOnRow";
 import { PlusCircleTwoTone, MinusCircleTwoTone } from "@ant-design/icons";
+import OnSelectFeature from "../../../utils/onselect";
 
 const ProTable = ({ currentTab }) => {
   const [data, setData] = useState([]);
@@ -31,7 +32,9 @@ const ProTable = ({ currentTab }) => {
       });
   }, [currentTab]);
 
-  const rowSelection = {
+  const [showSelect , setShowSelect] = useState(false)
+
+  const rowSele = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(
         `selectedRowKeys: ${selectedRowKeys}`,
@@ -44,17 +47,29 @@ const ProTable = ({ currentTab }) => {
     },
     onSelectAll: (selected, selectedRows, changeRows) => {
       console.log(selected, selectedRows, changeRows);
+      selected ? setShowSelect(selectedRows.length) : setShowSelect(selected)
     },
-  };
+  }
+  const [rowSelection , setRowSelection] = useState(rowSele)
+
+  const closeOnSelect = ()=>{setShowSelect(false)}
+  useEffect(()=>{
+    if(!showSelect){
+      setRowSelection(undefined)
+      setTimeout(()=>{setRowSelection(rowSele)} , 1)
+    }
+  },[showSelect])
 
   return (
     <>
+    {showSelect && <OnSelectFeature count={showSelect} close={closeOnSelect}/>}
       <Table
         dataSource={data}
-        columns={columns}
-        rowSelection={{ ...rowSelection }}
+        columns={[...columns]}
+        rowSelection={rowSelection }
         loading={loading}
         size={'small'}
+        showHeader={!showSelect}
         expandable={{
           expandIcon: ({ expanded, onExpand, record }) =>
             expanded ? (
