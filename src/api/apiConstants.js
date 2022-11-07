@@ -52,8 +52,8 @@ export const getRefineProducts = {
   'All':undefined,
   'Not Listed':{'filter[cif_amazon_multi_inactive][1]':'Not Listed'},
   'Inactive':{'filter[items.status][1]':'Inactive'},
-  'Incomplete':{'count=50&filter[items.status][1]':'Incomplete'},
-  'Active':{'count=50&filter[items.status][1]':'Active'},
+  'Incomplete':{'filter[items.status][1]':'Incomplete'},
+  'Active':{'filter[items.status][1]':'Active'},
   'Error':{'filter[cif_amazon_multi_active][1]':'error'},
 }
 
@@ -118,11 +118,12 @@ export const FetchTableData = async(allFilter) =>{
     }
   }) 
   queryParam = queryParam.filter(item => item!==undefined)
-  let tt = {}
+  let tt = {target_marketplace: 
+    'eyJtYXJrZXRwbGFjZSI6ImFsbCIsInNob3BfaWQiOm51bGx9'}
   queryParam.map(item =>{
     tt = {...tt , ...item}
   })
-  // console.log(tt)
+  console.log(tt)
   
   let str = new URL(`${productBaseUrl}`)
   for(let i in tt){
@@ -130,12 +131,7 @@ export const FetchTableData = async(allFilter) =>{
   }
   // console.log(str)
   
-  if(str === ''){
-    return await fetch(str , filterHeader)
-    .then(res => res.json())
-    .then(res => console.log(res))
-  }
-  else{
-    return await fetch(str , {headers : filterHeader}).then(res => res.json())
-  }
+ 
+    return await fetch(str , {headers : productHeaders}).then(res => res.json())
+  
 }

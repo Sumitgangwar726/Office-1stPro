@@ -1,7 +1,7 @@
 import {  Image } from "antd";
 import { Badge, Button} from "@shopify/polaris";
-import ErrorModal from "./ErrorModal";
 import Pooper from "../../../../utils/Pooper";
+import ErrorModal from "./ErrorModal";
 
 const badges = {
   Inactive: "info",

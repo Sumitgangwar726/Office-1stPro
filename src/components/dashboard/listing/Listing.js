@@ -15,6 +15,7 @@ import TagView from "./TagsView";
 import SearchField from "./SearchField";
 import ProTable from "./product-table";
 import { FetchTableData } from "../../../api/apiConstants";
+import BulkUpdate from "./bulkupdate/BulkUpdate";
 
 
 const Listing = () => {
@@ -26,7 +27,7 @@ const Listing = () => {
 
     useEffect(()=>{
         sessionStorage.setItem('filter' , JSON.stringify(allFilter))
-        FetchTableData(allFilter)
+        // FetchTableData(allFilter)
     },[allFilter])  
 
     
@@ -43,8 +44,11 @@ const Listing = () => {
             <Stack>
                 <SearchField setAllFilter={setAllFilter} allFilter={allFilter}/>
                 <FilterFeature setAllFilter={setAllFilter} allFilter={allFilter}/>
+                <BulkUpdate />
             </Stack>
+            <div style={{marginTop : '1vw'}}>
             <TagView setAllFilter={setAllFilter} allFilter={allFilter}/>
+            </div>
         </Card.Section>
         <Card.Section>
           <ProTable allFilter={allFilter}/>

@@ -10,7 +10,7 @@ function TagView({setAllFilter , allFilter}) {
     sel = Object.keys(t).map((item) => {
       // console.log(item);
       if (item === "query" && t[item][0]!=='') {
-        return [`Product ${t[item][1][1]} contains ${t[item][0]}`, item];
+        return [`${t[item][1][1]} contains ${t[item][0]}`, item];
       } else if (item === "tabSelected" && t[item][0]!=='All') {
         return [`Product status equals ${t[item][0]}`, item];
       } else if (t[item].change) {

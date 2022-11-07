@@ -10,10 +10,11 @@ const ProTable = ({ allFilter }) => {
   const [loading, setLoading] = useState(false);
 
   const setttData = async () => {
-    // alert()
+    setLoading(true)
     let res = await FetchTableData(allFilter);
-    console.log(res);
-    let t = [];
+    setLoading(false)
+    if(res.success){
+      let t = [];
     res.data.rows.map((item) => {
       let modifiedData = tableOnRow("main")(item);
       let modifiedItems = [];
@@ -23,8 +24,8 @@ const ProTable = ({ allFilter }) => {
       modifiedData.items = modifiedItems;
       t = [...t, modifiedData];
     });
-    console.log('first' , t)
     setData([...t]);
+    }else alert(res.message)
   };
 
   useEffect(() => {
@@ -55,6 +56,7 @@ const ProTable = ({ allFilter }) => {
         rowSelection={{ ...rowSelection }}
         loading={loading}
         size={"small"}
+        pagination={false}
         expandable={{
           expandIcon: ({ expanded, onExpand, record }) =>
             expanded ? (
