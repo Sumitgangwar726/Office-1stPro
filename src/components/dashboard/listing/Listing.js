@@ -16,9 +16,20 @@ const Listing = () => {
     else return FilterData;
   });
 
+  const [flag , setFlag] = useState()
+
+  useEffect(()=>{
+    setFlag(false)
+    return ()=>{setFlag(false)}
+  },[])
+
   useEffect(() => {
+    if(flag)  sessionStorage.removeItem('pagination')
+    else setFlag(true)
     sessionStorage.setItem("filter", JSON.stringify(allFilter));
   }, [allFilter]);
+
+  
 
   const [showBanner, setShowBanner] = useState(() => {
     let t = sessionStorage.getItem("banner");

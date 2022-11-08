@@ -1,13 +1,19 @@
 import { Button, ButtonGroup } from "@shopify/polaris";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeftMinor, ChevronRightMinor } from "@shopify/polaris-icons";
 import { FetchTotalCount, productOptions, totalProCountUrl } from "../../../../api/apiConstants";
 
-const TablePagination = ({ isPageChange, data, setIsPageChange, loading }) => {
+const TablePagination = ({ allFilter, data, setIsPageChange, loading }) => {
   const [totalCount, setTotalCount] = useState(0);
   const [pageNum, setPageNum] = useState(1);
-  useEffect(() => {
-      FetchTotalCount(pageNum)
+  var timer = useRef()
+  const handleDebounce = () =>{
+    clearTimeout(timer.current)
+    timer.current = setTimeout(setttData,1000)
+  }
+
+  const setttData = () =>{
+    FetchTotalCount(pageNum , allFilter)
         .then((res) => {
           if (res.success) {
             setTotalCount(res.data.count);
@@ -18,7 +24,10 @@ const TablePagination = ({ isPageChange, data, setIsPageChange, loading }) => {
           return JSON.parse(sessionStorage.getItem("pagination"))[1];
         } else return 1;
       });
-  }, [data]);
+  }
+  useEffect(() => {
+      handleDebounce()
+  }, [allFilter]);
 
   const nextHandler = () => {
     setPageNum((prev) => prev + 1);
@@ -41,13 +50,13 @@ const TablePagination = ({ isPageChange, data, setIsPageChange, loading }) => {
   return (
     <ButtonGroup>
       <Button
-        disabled={loading}
+        disabled={loading || pageNum < 2}
         icon={ChevronLeftMinor}
         onClick={prevHandler}
       />
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Button>{pageNum}</Button>
+        <Button disabled>{pageNum}</Button>
         <span>
           {" "}
           /{data.current_count ? Math.ceil(totalCount / data.current_count) : 1}
@@ -56,7 +65,7 @@ const TablePagination = ({ isPageChange, data, setIsPageChange, loading }) => {
       </div>
 
       <Button
-        disabled={loading}
+        disabled={loading || (pageNum*20)>=totalCount}
         icon={ChevronRightMinor}
         onClick={nextHandler}
       />

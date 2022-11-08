@@ -1,5 +1,5 @@
-import { Filters, Select, TextField } from "@shopify/polaris";
-import React, { useEffect, useMemo, useState } from "react";
+import { Filters, Select, Stack, TextField } from "@shopify/polaris";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { filterHeaders, filterUrl } from "../../../api/apiConstants";
 
 const FilterFeature = ({ setAllFilter, allFilter }) => {
@@ -47,63 +47,70 @@ const FilterFeature = ({ setAllFilter, allFilter }) => {
 
   const filters = [
     {
-      key: "inventory",
+      key: "Inventory",
       label: "Inventory",
       filter: (
-        <>
-          <Select
-            options={inventoryOptions}
-            value={allFilter.Inventory.selectValue}
-            onChange={(value) => {
-              allFilter.Inventory.selectValue = value;
-
-              setAllFilter({ ...allFilter });
-            }}
-          />
-          <TextField
-            label="Tagged with"
-            value={allFilter.Inventory.textValue}
-            type={"number"}
-            onChange={(value) => {
-              allFilter.Inventory.textValue = value;
-              allFilter.Inventory.change = value ? true : false;
-              setAllFilter({ ...allFilter });
-            }}
-            autoComplete="off"
-            labelHidden
-          />
-        </>
+        <Stack filter vertical>
+          <Stack.Item>
+            <Select
+              options={inventoryOptions}
+              value={allFilter.Inventory.selectValue}
+              onChange={(value) => {
+                allFilter.Inventory.selectValue = value;
+                setAllFilter({ ...allFilter });
+              }}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <TextField
+              label="Tagged with"
+              value={allFilter.Inventory.textValue}
+              type={"number"}
+              onChange={(value) => {
+                allFilter.Inventory.textValue = value;
+                allFilter.Inventory.change = value ? true : false;
+                setAllFilter({ ...allFilter });
+              }}
+              autoComplete="off"
+              labelHidden
+            />
+          </Stack.Item>
+        </Stack>
       ),
     },
     {
-      key: "sku",
+      key: "SKU",
       label: "SKU",
       filter: (
-        <>
+        <Stack filter vertical>
+          <Stack.Item>
           <Select
-            options={skuOptions}
-            value={allFilter.SKU.selectValue}
-            onChange={(value) => {
-              allFilter.SKU.selectValue = value;
-              setAllFilter({ ...allFilter });
-            }}
-          />
+          options={skuOptions}
+          value={allFilter.SKU.selectValue}
+          onChange={(value) => {
+            allFilter.SKU.selectValue = value;
+            setAllFilter({ ...allFilter });
+          }}
+        />
+          </Stack.Item>
+          <Stack.Item>
           <TextField
-            label="Tagged with"
-            value={allFilter.SKU.textValue}
-            onChange={(value) => {
-              allFilter.SKU.textValue = value;
-              allFilter.SKU.change = value ? true : false;
-              setAllFilter({ ...allFilter });
-            }}
-            autoComplete="off"
-            labelHidden
-          />
-        </>
+          label="Tagged with"
+          value={allFilter.SKU.textValue}
+          onChange={(value) => {
+            allFilter.SKU.textValue = value;
+            allFilter.SKU.change = value ? true : false;
+            setAllFilter({ ...allFilter });
+          }}
+          autoComplete="off"
+          labelHidden
+        />  
+          </Stack.Item>
+          </Stack>
       ),
     },
     {
-      key: "tags",
+      key: "Tags",
       label: "Tags",
       filter: (
         <>
@@ -122,7 +129,7 @@ const FilterFeature = ({ setAllFilter, allFilter }) => {
       ),
     },
     {
-      key: "product_type",
+      key: "Product Type",
       label: "Product Type",
       filter: (
         <>
@@ -141,7 +148,7 @@ const FilterFeature = ({ setAllFilter, allFilter }) => {
       ),
     },
     {
-      key: "vendor",
+      key: "Vendor",
       label: "Vendor",
       filter: (
         <>
@@ -166,12 +173,12 @@ const FilterFeature = ({ setAllFilter, allFilter }) => {
       ),
     },
     {
-      key: "template",
+      key: "Template Name",
       label: "Template Name",
       filter: <Select value="No template found" disabled />,
     },
     {
-      key: "product_status",
+      key: "Product Status",
       label: "Product Status",
       filter: (
         <Select
@@ -186,7 +193,7 @@ const FilterFeature = ({ setAllFilter, allFilter }) => {
       ),
     },
     {
-      key: "variant",
+      key: "Variant Attributes",
       label: "Variant Attributes",
       filter: (
         <Select
@@ -201,7 +208,7 @@ const FilterFeature = ({ setAllFilter, allFilter }) => {
       ),
     },
     {
-      key: "activity",
+      key: "Activity",
       label: "Activity",
       filter: (
         <>
@@ -220,7 +227,7 @@ const FilterFeature = ({ setAllFilter, allFilter }) => {
       ),
     },
     {
-      key: "type",
+      key: "Type",
       label: "Type",
       filter: (
         <Select
@@ -253,10 +260,10 @@ const FilterFeature = ({ setAllFilter, allFilter }) => {
     Object.keys(allFilter).map((item) => {
       if (allFilter[item].change) {
         t.push({
-          key: allFilter[item].value,
+          key: item,
           label: disambiguateLabel(
             item,
-            allFilter[item].searchvalue,
+            allFilter[item].selectValue,
             allFilter[item].textValue
           ),
           onRemove: () => removeFilter(item),
@@ -270,7 +277,8 @@ const FilterFeature = ({ setAllFilter, allFilter }) => {
     <>
       <Filters
         filters={filters || []}
-        // appliedFilters={[...appliedFilters]}
+        hideTags={true}
+        appliedFilters={[...appliedFilters]}
         onClearAll={removeAllFilter}
         hideQueryField
       ></Filters>

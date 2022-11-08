@@ -14,21 +14,6 @@ export const loginFetch = async (data) => {
   return await fetch(url(data), loginOption).then((res) => res.json());
 };
 
-//product api data
-
-
-
-const productPayload = {
-  source: {
-    marketplace: "shopify",
-    shopId: "507",
-  },
-  target: {
-    marketplace: "amazon",
-    shopId: "509",
-  },
-}
-
 export const productHeaders = {
   "Ced-Source-Id": 476,
   "Ced-Source-Name": "shopify",
@@ -43,7 +28,6 @@ export const productHeaders = {
 
 export const productOptions = {
   headers : productHeaders,
-  // payload : productPayload
 }
 
 const productBaseUrl = 'https://multi-account.sellernext.com/home/public/connector/product/getRefineProducts'
@@ -121,12 +105,10 @@ const makeData = (allFilter , page , url=productBaseUrl) =>{
     }
   }) 
   queryParam = queryParam.filter(item => item!==undefined)
-  let tt = {target_marketplace: 
-    'eyJtYXJrZXRwbGFjZSI6ImFsbCIsInNob3BfaWQiOm51bGx9'}
+  let tt = {}
   queryParam.map(item =>{
     tt = {...tt , ...item}
   })
-  
   let str = new URL(`${url}`)
   for(let i in tt){
     str.searchParams.append(i,tt[i])
@@ -148,7 +130,7 @@ export const FetchTableData = async(allFilter , page ) =>{
 export const bannerUrl = 'https://multi-account.sellernext.com/home/public/amazon/product/getMatchStatusCount'
 export const totalProCountUrl = 'https://multi-account.sellernext.com/home/public/connector/product/getRefineProductCount?target_marketplace=eyJtYXJrZXRwbGFjZSI6ImFsbCIsInNob3BfaWQiOm51bGx9'
 
-export const FetchTotalCount = async(page) =>{
-  let str = makeData(JSON.parse(sessionStorage.getItem('filter')) , page , totalProCountUrl)
+export const FetchTotalCount = async(page , allFilter) =>{
+  let str = makeData(allFilter, page , totalProCountUrl)
   return await fetch(str , {headers : productHeaders}).then(res => res.json())
 }

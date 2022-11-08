@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PlusCircleTwoTone, MinusCircleTwoTone } from "@ant-design/icons";
 import { FetchTableData } from "../../../../api/apiConstants";
 import { tableOnRow } from "./tableOnRow";
@@ -42,11 +42,15 @@ const ProTable = ({ allFilter }) => {
     setData([...t]);
     }else alert(res.message)
   };
-
+  var timer = useRef()
+  const handleDebounce = () =>{
+    clearTimeout(timer.current)
+    timer.current = setTimeout(setttData,1000)
+  }
   useEffect(() => {
-    setttData();
-    return sessionStorage.removeItem('pagination')
-  }, [allFilter]);
+    handleDebounce()
+  }, [allFilter])
+  
   useEffect(()=>{
     if(isPageChange){
       setttData()
@@ -57,8 +61,6 @@ const ProTable = ({ allFilter }) => {
   const [selectedRowKeys , setSelectedRowKeys] = useState([])
 
   const showHeader =  selectedRowKeys.length > 0
-
-  console.log(selectedRowKeys.length)
 
   const onSelectChange = (newSelectedRowKeys) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
@@ -112,7 +114,7 @@ const ProTable = ({ allFilter }) => {
       />
       </Stack.Item>
       <Stack.Item>
-        <TablePagination isPageChange={isPageChange}  data = {paginationData} setIsPageChange={setIsPageChange} loading={loading} />
+        <TablePagination allFilter={allFilter}  data = {paginationData} setIsPageChange={setIsPageChange} loading={loading} />
       </Stack.Item>
     </Stack>
   );

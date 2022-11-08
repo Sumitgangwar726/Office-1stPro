@@ -8,7 +8,7 @@ export const FilterData = {
   Inventory: {
     value: "items.quantity",
     textValue: "",
-    selectValue: "1",
+    selectValue: "equals",
     change: false,
   },
   SKU: {
